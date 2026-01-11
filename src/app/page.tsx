@@ -1,20 +1,35 @@
-import { Footer } from "@/components/layout/footer";
-import { Navbar } from "@/components/layout/navbar";
-import { Features } from "@/components/sections/features";
-import { Hero } from "@/components/sections/hero";
-import { ProFeatures } from "@/components/sections/pro-features";
-import { Stats } from "@/components/sections/stats";
-import { Testimonials } from "@/components/sections/testimonials";
+"use client";
 
-export default function Home() {
+import { Description } from "@/components/sections/description";
+import { Footer } from "@/components/sections/footer";
+import { Hero } from "@/components/sections/hero";
+import { Marquee } from "@/components/sections/marquee";
+import { Preloader } from "@/components/sections/preloader";
+import { Work } from "@/components/sections/work";
+import { Stats } from "@/components/sections/stats";
+import { Ecosystem } from "@/components/sections/ecosystem";
+import { Features } from "@/components/sections/features";
+import { Testimonials } from "@/components/sections/testimonials";
+import { CoreReactor } from "@/components/sections/core";
+import { Partners } from "@/components/sections/partners";
+import { SocialProof } from "@/components/sections/social-proof";
+
+
+export default function VynePage() {
   return (
-    <main className="min-h-screen bg-white text-foreground antialiased selection:bg-pink-100 selection:text-pink-900">
-      <Navbar />
+    <main>
+      <Preloader />
       <Hero />
+      <Marquee />
+      <Description />
+      <Work />
       <Features />
-      <ProFeatures />
       <Stats />
+      <Ecosystem />
       <Testimonials />
+      <CoreReactor />
+      <Partners />
+      <SocialProof />
       <Footer />
     </main>
   );

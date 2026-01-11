@@ -1,87 +1,97 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
-import { BarChart, Globe2, Heart, Users2 } from "lucide-react";
-import { useRef } from "react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { MoveUpRight } from "lucide-react";
+
+gsap.registerPlugin(ScrollTrigger);
+
+const stats = [
+  { label: "Total Value Locked", value: 4.2, suffix: "B", prefix: "$" },
+  { label: "Transactions / Sec", value: 125, suffix: "k", prefix: "" },
+  { label: "Active Nodes", value: 89, suffix: "k+", prefix: "" },
+  { label: "Avg. Gas Cost", value: 0.001, suffix: "", prefix: "$" },
+];
 
 export function Stats() {
-  const containerRef = useRef(null);
-  const cardsRef = useRef(null);
+  const containerRef = useRef<HTMLSectionElement>(null);
 
-  useGSAP(() => {
-    const tl = gsap.timeline({
-        scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 75%",
-            toggleActions: "play none none reverse",
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Animate numbers
+      stats.forEach((_, i) => {
+        const target = stats[i];
+        const element = document.getElementById(`stat-${i}`);
+        
+        if (element) {
+            ScrollTrigger.create({
+                trigger: element,
+                start: "top 85%",
+                onEnter: () => {
+                    gsap.to(element, {
+                        innerHTML: target.value,
+                        duration: 2,
+                        snap: { innerHTML: 0.1 },
+                        ease: "power2.out",
+                    });
+                }
+            });
         }
-    });
-    
-    // Cards Stagger
-    tl.from(".stat-card", {
-        y: 60,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.2,
-        ease: "power2.out",
-    });
+      });
 
-  }, { scope: containerRef });
+      // Animate Cards opacity
+      gsap.from(".stat-card", {
+          y: 50,
+          opacity: 0,
+          duration: 1,
+          stagger: 0.1,
+          scrollTrigger: {
+              trigger: containerRef.current,
+              start: "top 70%",
+          }
+      });
+      
+    }, containerRef);
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <section ref={containerRef} className="py-24 bg-[#FAFAFA]" id="about-us">
-      <div className="container px-4 mx-auto max-w-6xl">
-        
-        {/* Header Row */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-20 gap-8">
-            <h2 className="text-5xl md:text-6xl font-bold tracking-tight leading-tight max-w-lg">
-                Key Reasons To <br /> Choose Us
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-sm leading-relaxed mb-2">
-                Whatever your customers' payment preferences, we'll help you find the right solution for your business.
-            </p>
-        </div>
+    <section ref={containerRef} className="bg-black text-white py-32 px-6 md:px-12 relative overflow-hidden">
+      {/* Background Decor */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-green-500/10 rounded-full blur-[128px] pointer-events-none -translate-y-1/2 translate-x-1/2" />
 
-        {/* Stats Cards Grid */}
-        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            
-            {/* Card 1 */}
-            <div className="stat-card bg-white p-10 rounded-xl ">
-                <div className="bg-red-50 text-red-500 w-max px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 mb-6">
-                    <Users2 className="size-4" /> Customers
+      <div className="flex flex-col md:flex-row justify-between items-end mb-20">
+         <div className="max-w-xl">
+             <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-6">
+                PROTOCOL <span className="text-neutral-600">METRICS</span>
+             </h2>
+             <p className="text-neutral-400 font-mono text-sm leading-relaxed">
+                Real-time performance data from the Vyne Mainnet. Our architecture scales linearly with network demand, ensuring zero-latency execution for high-frequency trading and gaming applications.
+             </p>
+         </div>
+         <button className="hidden md:flex items-center gap-2 px-6 py-3 border border-white/20 rounded-full hover:bg-white hover:text-black transition-all group">
+             <span className="text-xs font-bold uppercase tracking-widest">View Explorer</span>
+             <MoveUpRight className="w-4 h-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+         </button>
+      </div>
+
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
+        {stats.map((stat, i) => (
+            <div key={i} className="stat-card p-6 md:p-8 rounded-sm bg-[#0a0a0a] border border-white/10 hover:border-green-500/50 transition-colors group relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-green-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                
+                <h3 className="text-neutral-500 text-xs font-mono uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                    {stat.label}
+                </h3>
+                <div className="text-4xl md:text-5xl font-bold tracking-tighter font-mono">
+                    <span className="text-neutral-600 mr-1">{stat.prefix}</span>
+                    <span id={`stat-${i}`}>0</span>
+                    <span className="text-green-400">{stat.suffix}</span>
                 </div>
-                <h3 className="text-6xl font-bold mb-4">20K<sup className="text-4xl text-gray-400">+</sup></h3>
-                <p className="text-muted-foreground leading-relaxed">
-                    In 38 Countries, We Work As One Global Team To Help Clients
-                </p>
             </div>
-
-            {/* Card 2 */}
-            <div className="stat-card bg-white p-10 rounded-xl ">
-                <div className="bg-red-50 text-red-500 w-max px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 mb-6">
-                    <Heart className="size-4" /> Impact
-                </div>
-                <h3 className="text-6xl font-bold mb-4">98<sup className="text-4xl text-gray-400">%</sup></h3>
-                <p className="text-muted-foreground leading-relaxed">
-                     We Have Worked With 89% Of The Global 500 Companies.
-                </p>
-            </div>
-
-            {/* Card 3 */}
-            <div className="stat-card bg-white p-10 rounded-xl ">
-                <div className="bg-red-50 text-red-500 w-max px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 mb-6">
-                    <BarChart className="size-4" /> Experience
-                </div>
-                <h3 className="text-6xl font-bold mb-4">89<sup className="text-4xl text-gray-400">%</sup></h3>
-                <p className="text-muted-foreground leading-relaxed">
-                    We Started With A Rebellious Mindset And Set Ourselves The Challenge
-                </p>
-            </div>
-
-        </div>
-
+        ))}
       </div>
     </section>
   );

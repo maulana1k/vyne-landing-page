@@ -1,127 +1,95 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
-import { Banknote, DollarSign } from "lucide-react"; // Approximations for the floating 3d icons
-import { useRef } from "react";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-const TESTIMONIALS = [
+const testimonials = [
   {
-    name: "Megan",
-    role: "Student at New York University",
-    quote: "This cup is fantastic! It is so well insulated. I live in the desert, and it keeps my cold drinks cold in the heat",
-    img: 10
+    user: "alex_dev",
+    role: "Senior Solidity Engineer",
+    log: "Migrating to Vyne reduced our gas costs by 94%. The developer tooling is unmatched in the ecosystem. > Transaction confirmed."
   },
   {
-    name: "Jerry Tang",
-    role: "Recent graduate, Marketing at Sweatpals",
-    quote: "Joining Mate community is the best thing I have ever done. The projects I worked on gave me the experience I needed in content Marketing",
-    img: 11
+    user: "sarah_ceo",
+    role: "Founder @ DeFi_Labs",
+    log: "We scaled to 1M daily active users without a single hiccup. Vyne's mesh network is the real deal. > Scaling protocol initiated."
   },
   {
-    name: "Jerry Tang",
-    role: "Recent graduate, Marketing at Sweatpals",
-    quote: "I love the color. It's even better in person. I love that iron flask gives you multiple lids as well. It's sturdy.",
-    img: 12
-  },
-  {
-    name: "David K.",
-    role: "Recent graduate, Marketing at Sweatpals",
-    quote: "I love the color. It's even better in person. I love that iron flask gives you multiple lids as well. It's sturdy. It is kept my cold beverages clothes for way longer than I had expected it to.",
-    img: 13
-  },
-  {
-    name: "Megan",
-    role: "Student at New York University",
-    quote: "I absolutely love this cup. I've bought several different brands and there's always something I end up not liking about them. This one checks all of the boxes.",
-    img: 14
-  },
-  {
-    name: "David K.",
-    role: "Recent graduate",
-    quote: "I absolutely love this cup. I've bought several different brands and there's always something",
-    img: 15
+    user: "crypto_kai",
+    role: "Validator Node Operator",
+    log: "Running a node has never been this efficient. The consensus mechanism is pure genius. > Node synced successfully."
   }
 ];
 
 export function Testimonials() {
-  const containerRef = useRef(null);
-  const headerRef = useRef(null);
+  const [index, setIndex] = useState(0);
 
-  useGSAP(() => {
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top 70%",
-        toggleActions: "play none none reverse",
-      }
-    });
-
-    tl.from(headerRef.current, { y: 30, opacity: 0, duration: 0.8 });
-    
-    tl.from(".testimonial-card", {
-      y: 50,
-      opacity: 0,
-      duration: 0.8,
-      stagger: 0.1,
-      ease: "power2.out",
-    }, "-=0.4");
-
-  }, { scope: containerRef });
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % testimonials.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
-    <section ref={containerRef} className="py-32 bg-white relative overflow-hidden" id="reviews">
-      <div className="container px-4 mx-auto max-w-6xl">
+    <section className="bg-black text-white py-32 px-6 md:px-12 border-t border-white/10">
+      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         
-        {/* Header */}
-        <div ref={headerRef} className="text-center mb-20 relative z-10">
-            {/* Top Labels */}
-            <div className="flex justify-center gap-8 mb-6 text-sm font-semibold text-gray-500">
-                <span className="text-black">Our Customers</span>
-                <span>Talk About IT</span>
-                <span>Better Than Us</span>
-            </div>
-
-            <h2 className="text-5xl md:text-7xl font-bold tracking-tight mb-6">
-                Hear What Customer <br /> Have To Say
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-                See Your Whole Financial Picture In One Place, Alongside A Smarter Approach To Investing And Real Human.
-            </p>
-
-            {/* Floating Icons (Decorative) */}
-            <div className="absolute top-10 left-[10%] -z-10 animate-music-float">
-                <div className="bg-yellow-100 p-3 rounded-full">
-                    <DollarSign className="size-8 text-yellow-600" />
-                </div>
-            </div>
-            <div className="absolute top-10 right-[10%] -z-10 animate-music-float-delayed">
-                <div className="bg-green-100 p-3 rounded-full">
-                    <Banknote className="size-8 text-green-600" />
-                </div>
-            </div>
+        <div>
+           <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mb-8 leading-tight">
+               TRUSTED BY<br/>
+               <span className="text-neutral-500">BUILDERS.</span>
+           </h2>
+           <div className="flex gap-4">
+               <div className="h-12 w-12 bg-white/10 rounded-full" />
+               <div className="h-12 w-12 bg-white/10 rounded-full" />
+               <div className="h-12 w-12 bg-white/10 rounded-full" />
+               <div className="h-12 w-12 border border-white/10 rounded-full flex items-center justify-center text-xs text-neutral-500">
+                   +500
+               </div>
+           </div>
         </div>
 
-        {/* Masonry Grid */}
-        <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
-            {TESTIMONIALS.map((t, i) => (
-                <div key={i} className="testimonial-card break-inside-avoid bg-[#F5F1EE] p-8 rounded-3xl hover:shadow-lg transition-shadow duration-300">
-                     <div className="flex items-center gap-4 mb-6">
-                        <div className="size-14 rounded-full bg-gray-300 overflow-hidden relative">
-                             {/* Placeholder Avatar */}
-                             <div className={`absolute inset-0 bg-[url('https://i.pravatar.cc/150?img=${t.img}')] bg-cover`} />
+        {/* Terminal Window */}
+        <div className="w-full bg-[#0F0F0F] rounded-lg border border-white/10 overflow-hidden font-mono text-sm shadow-2xl shadow-green-900/10">
+            {/* Terminal Header */}
+            <div className="bg-[#1a1a1a] px-4 py-2 flex gap-2 border-b border-white/5">
+                <div className="w-3 h-3 rounded-full bg-red-500/50" />
+                <div className="w-3 h-3 rounded-full bg-yellow-500/50" />
+                <div className="w-3 h-3 rounded-full bg-green-500/50" />
+                <div className="ml-auto text-xs text-neutral-600">bash — 80x24</div>
+            </div>
+            
+            {/* Terminal Body */}
+            <div className="p-6 h-[200px] flex flex-col justify-end relative">
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.3 }}
+                        className="absolute inset-0 p-6"
+                    >
+                        <div className="text-green-400 mb-2">
+                           ➜  ~ <span className="text-white">read_log --user={testimonials[index].user}</span>
                         </div>
-                        <div>
-                            <h4 className="font-bold text-lg">{t.name}</h4>
-                            <p className="text-xs text-muted-foreground">{t.role}</p>
+                        <div className="text-neutral-300 leading-relaxed mb-4">
+                           "{testimonials[index].log}"
                         </div>
-                     </div>
-                     <p className="text-gray-700 leading-relaxed font-medium">
-                        “{t.quote}”
-                     </p>
-                </div>
-            ))}
+                        <div className="text-neutral-500 text-xs uppercase tracking-widest">
+                           // {testimonials[index].role}
+                        </div>
+                    </motion.div>
+                </AnimatePresence>
+                
+                {/* Blinking Cursor */}
+                <motion.div 
+                    animate={{ opacity: [0, 1, 0] }}
+                    transition={{ repeat: Infinity, duration: 0.8 }}
+                    className="w-2 h-4 bg-green-400 mt-auto"
+                />
+            </div>
         </div>
 
       </div>
