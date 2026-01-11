@@ -7,7 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 export function Description() {
-  const sectionRef = useRef<HTMLSectionElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const textRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export function Description() {
           ))}
         </p>
         
-        <div className="mt-16 h-[1px] w-full bg-neutral-300" />
+        <div className="mt-16 h-px w-full bg-neutral-300" />
         
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8 text-sm md:text-base text-neutral-600">
              <div>

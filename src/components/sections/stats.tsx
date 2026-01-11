@@ -15,7 +15,7 @@ const stats = [
 ];
 
 export function Stats() {
-  const containerRef = useRef<HTMLSectionElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -79,7 +79,7 @@ export function Stats() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
         {stats.map((stat, i) => (
             <div key={i} className="stat-card p-6 md:p-8 rounded-sm bg-[#0a0a0a] border border-white/10 hover:border-green-500/50 transition-colors group relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-green-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute inset-0 bg-linear-to-b from-transparent to-green-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                 
                 <h3 className="text-neutral-500 text-xs font-mono uppercase tracking-widest mb-4 flex items-center gap-2">
                     <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
